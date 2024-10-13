@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+    <div class="grid grid-cols-3 gap-4 mb-8">
+        <div class="bg-green-200 p-4 rounded">
+            <h2 class="text-xl font-bold">Total Income</h2>
+            <p class="text-2xl">{{ total_income }}</p>
+        </div>
+        <div class="bg-blue-200 p-4 rounded">
+            <h2 class="text-xl font-bold">Total Balance</h2>
+            <p class="text-2xl">{{ total_balance }}</p>
+        </div>
+        <div class="bg-red-200 p-4 rounded">
+            <h2 class="text-xl font-bold">Total Expense</h2>
+            <p class="text-2xl">{{ total_expense }}</p>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mb-4">Add Transaction</h2>
+    <form action="{{ url_for('main.add_transaction') }}" method="post" class="mb-8">
+        <input type="number" name="amount" placeholder="Amount" required class="p-2 mr-2">
+        <select name="type" required class="p-2 mr-2">
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+        </select>
+        <input type="text" name="description" placeholder="Description" class="p-2 mr-2">
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded">Add Transaction</button>
+    </form>
+
+    <h2 class="text-2xl font-bold mb-4">Transaction History</h2>
+    <table class="w-full">
+        <thead>
+            <tr>
+                <th class="text-left">Date</th>
+                <th class="text-left">Type</th>
+                <th class="text-left">Amount</th>
+                <th class="text-left">Description</th>
+                <th class="text-left">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ transaction.type }}</td>
+                <td>{{ transaction.amount }}</td>
+                <td>{{ transaction.description }}</td>
+                <td>
+                    <a href="{{ url_for('main.edit_transaction', id=transaction.id) }}" class="text-blue-500">Edit</a>
+                    <a href="{{ url_for('main.delete_transaction', id=transaction.id) }}" class="text-red-500 ml-2">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <h2 class="text-2xl font-bold mb-4">Welcome to Financial Tracker</h2>
+    <p class="mb-4">Please <a href="{{ url_for('main.login') }}" class="text-blue-500">login</a> or <a href="{{ url_for('main.register') }}" class="text-blue-500">register</a> to start tracking your finances.</p>
+{% endif %}
+{% endblock %}
