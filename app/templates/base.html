@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Tracker</title>
+    <title>Финансовый трекер</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
     <nav class="bg-blue-500 p-4 text-white">
         <div class="container mx-auto">
-            <a href="{{ url_for('main.index') }}" class="text-2xl font-bold">Financial Tracker</a>
+            <a href="{{ url_for('main.index') }}" class="text-2xl font-bold">Финансовый трекер</a>
             <div class="float-right">
                 {% if current_user.is_authenticated %}
-                    <span class="mr-4">Welcome, {{ current_user.username }}</span>
-                    <a href="{{ url_for('main.logout') }}">Logout</a>
+                    <span class="mr-4">Добро пожаловать, {{ current_user.username }}</span>
+                    <a href="{{ url_for('main.logout') }}">Выйти</a>
                 {% else %}
-                    <a href="{{ url_for('main.login') }}" class="mr-4">Login</a>
-                    <a href="{{ url_for('main.register') }}">Register</a>
+                    <a href="{{ url_for('main.login') }}" class="mr-4">Авторизоваться</a>
+                    <a href="{{ url_for('main.register') }}">Зарегистрироваться</a>
                 {% endif %}
             </div>
         </div>

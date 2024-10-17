@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Редактирование транзакции:</h2>
+<form method="post" class="max-w-md">
+    <div class="mb-4">
+        <label for="amount" class="block mb-2">Сумма:</label>
+        <input type="number" id="amount" name="amount" value="{{ transaction.amount }}" required class="w-full p-2 border rounded">
+    </div>
+    <div class="mb-4">
+        <label for="type" class="block mb-2">Тип:</label>
+        <select id="type" name="type" required class="w-full p-2 border rounded">
+            <option value="Заработок" {% if transaction.type == 'Заработок' %}selected{% endif %}>Заработок</option>
+            <option value="Трата" {% if transaction.type == 'Трата' %}selected{% endif %}>Трата</option>
+        </select>
+    </div>
+    <div class="mb-4">
+        <label for="description" class="block mb-2">Описание</label>
+        <input type="text" id="description" name="description" value="{{ transaction.description }}" class="w-full p-2 border rounded">
+    </div>
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded">Обновить транзакцию</button>
+</form>
+<a href="{{ url_for('main.index') }}" class="text-blue-500 mt-4 inline-block">Вернуться</a>
+{% endblock %}

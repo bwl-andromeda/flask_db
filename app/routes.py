@@ -10,8 +10,8 @@ bp = Blueprint('main', __name__)
 @login_required
 def index():
     transactions = Transaction.query.filter_by(user_id=current_user.id).order_by(Transaction.date.desc()).all()
-    total_income = sum(t.amount for t in transactions if t.type == 'income')
-    total_expense = sum(t.amount for t in transactions if t.type == 'expense')
+    total_income = sum(t.amount for t in transactions if t.type == 'Заработок')
+    total_expense = sum(t.amount for t in transactions if t.type == 'Трата')
     total_balance = total_income - total_expense
     return render_template('index.html', transactions=transactions,
                            total_income=total_income, total_expense=total_expense,
@@ -33,7 +33,7 @@ def add_transaction():
 def edit_transaction(id):
     transaction = Transaction.query.get_or_404(id)
     if transaction.user_id != current_user.id:
-        flash('You do not have permission to edit this transaction.')
+        flash('У вас нет прав что бы редактировать данную транзакцию.')
         return redirect(url_for('main.index'))
     if request.method == 'POST':
         transaction.amount = float(request.form['amount'])
@@ -48,7 +48,7 @@ def edit_transaction(id):
 def delete_transaction(id):
     transaction = Transaction.query.get_or_404(id)
     if transaction.user_id != current_user.id:
-        flash('You do not have permission to delete this transaction.')
+        flash('У вас нет прав что бы удалить данную транзакцию.')
         return redirect(url_for('main.index'))
     db.session.delete(transaction)
     db.session.commit()
@@ -63,13 +63,13 @@ def register():
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
         if user:
-            flash('Username already exists. Please choose a different one.')
+            flash('Такое имя пользователя уже существует. Выберите другое.')
             return redirect(url_for('main.register'))
         new_user = User(username=username)
         new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
-        flash('Registration successful. Please log in.')
+        flash('Регистрация прошла успешно! Пожалуйста, авторизуйтесь.')
         return redirect(url_for('main.login'))
     return render_template('register.html')
 
@@ -87,7 +87,7 @@ def login():
             if not next_page or url_parse(next_page).netloc != '':
                 next_page = url_for('main.index')
             return redirect(next_page)
-        flash('Invalid username or password.')
+        flash('Неправильное имя пользователя или пароль.')
     return render_template('login.html')
 
 @bp.route('/logout')
